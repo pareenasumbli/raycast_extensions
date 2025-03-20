@@ -1,7 +1,11 @@
 import { ActionPanel, Form, Action, showToast, Toast } from "@raycast/api";
 import { runAppleScript } from "run-applescript";
+import { useState } from "react"; // userState allows state management
 
 export default function QuickAddToDaily() {
+    // Use useState to track the input value
+    const [text, setText] = useState("");
+
   async function handleSubmit(values: { text: string }) {
     try {
       // Format the text - if it doesn't start with a task marker, add one
@@ -19,6 +23,9 @@ export default function QuickAddToDaily() {
       `;
       
       await runAppleScript(script);
+
+      // Reset the input field after submission
+      setText("");
       
       await showToast({
         style: Toast.Style.Success,
@@ -46,7 +53,9 @@ export default function QuickAddToDaily() {
         id="text"
         title="Quick Note/Task"
         placeholder="Enter your thought or task..."
-        auto-focus={true}
+        value={text}
+        onChange={setText}
+        auto-Focus={true}
       />
     </Form>
   );
